@@ -1,4 +1,4 @@
-/* Fonte: horário de Engenharia Biomédica, 2026/2. Cargas e requisitos aguardam matriz. */
+/* Fonte: horário de Engenharia Biomédica, 2026/2. Cargas e requisitos: fluxograma EB2020 versão 12 fornecido pelo usuário. */
 (function(root){
 const slots=[['07:10','08:00'],['08:00','08:50'],['08:50','09:40'],['09:50','10:40'],['10:40','11:30'],['11:30','12:20'],['13:10','14:00'],['14:00','14:50'],['14:50','15:40'],['16:00','16:50'],['16:50','17:40'],['17:40','18:30'],['19:00','19:50'],['19:50','20:40'],['20:50','21:40'],['21:40','22:30']];
 const courses=[];
@@ -70,6 +70,32 @@ c(8,'FEELT32802','EHOS','Engenharia Hospitalar',[o('B*',s(2,0,1),s(3,6,7))],'O a
 c('9–10','FEELT31908','TCC','Trabalho de Conclusão de Curso',[],'Sem horário fixo. O PDF agrupa o 9º e o 10º período.');
 c('9–10','FEELT31005','ESTÁGIO','Estágio Obrigatório em Engenharia Biomédica',[],'Sem horário fixo. O PDF agrupa o 9º e o 10º período.');
 c('9–10','FEELT32903','EXT5','Atividades Curriculares de Extensão V',[],'Sem horário fixo. O PDF agrupa o 9º e o 10º período.');
+// Numeração e cargas totais do fluxograma EB2020, versão 12 (página única).
+const curriculum = [
+[1,'C1',90],[2,'GA',60],[3,'EXPG',60],[4,'PSC',60],[5,'IEB',30],[6,'MTR',60],[7,'EXT1',90],
+[8,'C2',90],[9,'ALG',45],[10,'FIS1',60],[11,'E-FIS1',30],[12,'PP',60],[13,'ANAT',105],[14,'EXT2',60],
+[15,'C3',90],[16,'ESTAT',60],[17,'FIS2',60],[18,'E-FIS2',30],[19,'CE1',75],[20,'E-CE1',15],[21,'MCS',30],[22,'EXT3',90],
+[23,'MMT',75],[24,'ELA1',60],[25,'E-ELA1',30],[26,'BIOQ',60],[27,'FIS3',60],[28,'FT',60],[29,'SDG',30],[30,'E-SDG',30],[31,'EXT4',60],
+[32,'SS',60],[33,'ELA2',60],[34,'E-ELA2',30],[35,'FISIO',90],[36,'SEMB1',105],[37,'ININD1',60],[38,'CECO',60],
+[39,'ITEL',30],[40,'E-ITEL',30],[41,'BIOMEC',60],[42,'BIOF',90],[43,'SCR',60],[44,'E-SCR',30],[45,'PSB',60],[46,'PJI',30],
+[47,'ADM',60],[48,'CTBIO',60],[49,'IMG1',60],[50,'FHUS',60],[51,'RTA',60],[52,'IB1',90],[53,'ECLIN1',60],
+[54,'CSJ',60],[55,'ATS',60],[56,'IMG2',60],[57,'GRH',30],[58,'TEL',60],[59,'IB2',90],[60,'ECLIN2',60],[61,'EHOS',60],
+[62,'TCC',60],[63,'EXT5',120],[64,'ESTÁGIO',180]
+];
+const byNumber=new Map();
+for(const [number,short,hours] of curriculum){const course=courses.find(c=>c.short===short);if(!course)throw Error('Disciplina curricular não encontrada: '+short);Object.assign(course,{curriculumNumber:number,hours,prerequisites:[],corequisites:[],minCompletedHours:0});byNumber.set(number,course);}
+// Setas simples: pré-requisitos. Setas duplas: co-requisitos.
+for(const [number,required] of [[8,1],[15,8],[23,15],[33,24],[56,49],[59,52],[60,53]])byNumber.get(number).prerequisites.push(byNumber.get(required).id);
+for(const [a,b] of [[10,11],[17,18],[19,20],[24,25],[29,30],[33,34],[39,40],[43,44]]){byNumber.get(a).corequisites.push(byNumber.get(b).id);byNumber.get(b).corequisites.push(byNumber.get(a).id);}
+byNumber.get(62).minCompletedHours=2700;
+byNumber.get(64).minCompletedHours=2300;
+byNumber.get(62).period=9;byNumber.get(63).period=9;byNumber.get(64).period=10;
+byNumber.get(62).note='Sem horário fixo. Exige pelo menos 2.700 horas curriculares concluídas.';
+byNumber.get(64).note='Sem horário fixo. Exige pelo menos 2.300 horas curriculares concluídas.';
+byNumber.get(63).note='Sem horário fixo. Alocada no 9º período pelo fluxograma.';
+byNumber.get(21).note='Período confirmado no fluxograma: 3º. O cabeçalho da página 5 do PDF de horários é inconsistente.';
+byNumber.get(22).note='Sem horário fixo. Período confirmado no fluxograma: 3º.';
+courses.sort((a,b)=>a.period-b.period);
 root.BIO_DATA={courses,slots,semester:'2026.2'};
 if(typeof module!=='undefined')module.exports=root.BIO_DATA;
 })(typeof window==='undefined'?globalThis:window);
