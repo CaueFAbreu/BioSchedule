@@ -12,7 +12,6 @@ c(1,'FEELT31107','PSC','Programação Script',[o('A1',s(2,4,5,6,7)),o('A2',s(2,4
 c(1,'FEELT31106','IEB','Introdução à Engenharia Biomédica',[o('B',s(2,2,3))]);
 c(1,'FEELT31204','MTR','Metrologia',[o('A2',s(1,8,9),s(4,2,3)),o('A3',s(1,8,9),s(4,4,5)),o('B1',s(3,0,1),s(2,6,7)),o('B4',s(2,4,5,6,7))]);
 c(1,'FEELT32102','EXT1','Extensão 1',[],'Online, sem horário fixo. As 90h são carga curricular e não ocupam blocos na grade semanal.');
-courses[courses.length-1].modality='online';
 c(2,'FAMAT31012','C2','Cálculo Diferencial e Integral II',[o('1',s(0,10,11),s(1,10,11),s(2,10,11))]);
 c(2,'ICBIM39204','ANAT','Anatomia Humana',[o('B',s(1,1,2,3,4),s(2,3,4,5))]);
 c(2,'FEELT31201','PP','Programação Procedimental',[o('A1',s(3,0,1,2,3)),o('A2',s(3,0,1,4,5))],'Confirmar aulas comuns: o PDF mostra “A1/A” às 07:10 e 08:00; interpretado como A1/A2.');
@@ -95,6 +94,12 @@ byNumber.get(64).note='Sem horário fixo. Exige pelo menos 2.300 horas curricula
 byNumber.get(63).note='Sem horário fixo. Alocada no 9º período pelo fluxograma.';
 byNumber.get(21).note='Período confirmado no fluxograma: 3º. O cabeçalho da página 5 do PDF de horários é inconsistente.';
 byNumber.get(22).note='Sem horário fixo. Período confirmado no fluxograma: 3º.';
+// Modalidade confirmada pelo usuário para todos os componentes de extensão.
+for(const course of courses.filter(c=>/^EXT[1-5]$/.test(c.short))){
+  course.modality='online';
+  course.sections=[];
+  course.note=`Online, sem horário fixo. As ${course.hours}h são carga curricular e não ocupam blocos na grade semanal.`;
+}
 courses.sort((a,b)=>a.period-b.period);
 root.BIO_DATA={courses,slots,semester:'2026.2'};
 if(typeof module!=='undefined')module.exports=root.BIO_DATA;
