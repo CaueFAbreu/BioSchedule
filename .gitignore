@@ -1,3 +1,16 @@
+# Material local de conferência (imagens das páginas dos PDFs)
 qa/
+*.pdf
+
+# Variáveis de ambiente e credenciais locais
+.env
+.env.*
+
+# Dependências e caches de ferramentas
+node_modules/
 __pycache__/
 *.log
+
+# Arquivos gerados pelo sistema operacional
+.DS_Store
+Thumbs.db
