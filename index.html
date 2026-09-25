@@ -8,13 +8,13 @@
   <meta name="description" content="Monte sua grade de Engenharia Biomédica, compare turmas, acompanhe disciplinas concluídas e organize provas e trabalhos.">
   <title>BioSchedule — sua grade, do seu jeito</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23202727'/%3E%3Cpath d='M8 10h16M8 16h7m3 0h6M8 22h7m3 0h6' stroke='%23b1c18c' stroke-width='3'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="styles.css?v=dece47f06485">
+  <link rel="stylesheet" href="styles.css?v=2859b561a5a9">
   <script defer src="config.js?v=b031be845990"></script>
   <script defer src="data.js?v=c6755507a3db"></script>
   <script defer src="core.js?v=bec679da00cf"></script>
-  <script defer src="store.js?v=ee020244c597"></script>
+  <script defer src="store.js?v=60654b3cac9a"></script>
   <script defer src="agenda.js?v=89c6d9143975"></script>
-  <script defer src="auth.js?v=7d5fda36f614"></script>
+  <script defer src="auth.js?v=5af3f6d08ada"></script>
   <script defer src="app.js?v=c1c6b1526b3c"></script>
 </head>
 <body>
@@ -98,7 +98,11 @@
       <div id="agenda-month" hidden></div>
     </section>
 
-    <footer>BioSchedule <span>Um semestre de cada vez.</span></footer>
+    <footer>
+      BioSchedule
+      <button type="button" class="link-button" data-open-privacy>Privacidade</button>
+      <span>Um semestre de cada vez.</span>
+    </footer>
   </main>
 
   <dialog id="item-dialog" aria-labelledby="item-dialog-title">
@@ -144,8 +148,38 @@
         <button type="button" class="link-button" data-mode="signup">Criar conta</button>
         <button type="button" class="link-button" data-mode="reset">Esqueci a senha</button>
         <button type="button" class="link-button" data-mode="signin">Já tenho conta</button>
+        <button type="button" class="link-button" data-open-privacy>Privacidade</button>
       </p>
     </form>
+  </dialog>
+
+  <dialog id="privacy-dialog" aria-labelledby="privacy-title">
+    <div class="privacy">
+      <h2 id="privacy-title">Privacidade</h2>
+      <p><strong>Sem conta</strong>, suas escolhas e sua agenda ficam somente neste navegador. Nada é enviado a servidores.</p>
+      <p><strong>Com conta</strong>, são armazenados no <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer">Supabase</a>, provedor de banco de dados e autenticação:</p>
+      <ul>
+        <li>seu e-mail e sua senha, guardada de forma criptografada e nunca visível;</li>
+        <li>sua grade: disciplinas selecionadas, turmas e disciplinas concluídas;</li>
+        <li>sua agenda: compromissos, datas, notas e anotações.</li>
+      </ul>
+      <p><strong>Finalidade:</strong> exclusivamente salvar e sincronizar seu planejamento entre dispositivos. Os dados não são usados para publicidade, vendidos ou compartilhados.</p>
+      <p><strong>Acesso:</strong> regras de segurança do banco garantem que, pelo site, somente você acesse seus dados. O responsável pelo projeto tem acesso administrativo ao banco apenas para manutenção e suporte.</p>
+      <p><strong>Sem rastreamento:</strong> não há cookies de publicidade nem ferramentas de análise. O navegador guarda apenas suas escolhas (sem conta) e a sessão de login.</p>
+      <p><strong>Seus direitos (LGPD):</strong> você pode excluir sua conta e todos os dados a qualquer momento, nesta janela, estando conectado. Dúvidas e solicitações: <a href="https://github.com/CaueFAbreu/BioSchedule/issues" target="_blank" rel="noopener noreferrer">abra uma issue no GitHub</a>, sem incluir dados pessoais.</p>
+      <p class="hint">Atualizado em 25/09/2026.</p>
+      <p id="privacy-status" class="auth-message" role="status"></p>
+
+      <form id="delete-form" class="danger-zone" novalidate hidden>
+        <h3>Excluir minha conta</h3>
+        <p>Apaga permanentemente seu e-mail, sua grade e sua agenda. Esta ação não pode ser desfeita.</p>
+        <label class="field"><span>Digite <b>EXCLUIR</b> para confirmar</span> <input name="confirm" autocomplete="off" spellcheck="false"></label>
+        <p id="delete-message" class="auth-message" role="status"></p>
+        <div class="dialog-actions"><button type="submit" class="danger" id="delete-submit">Excluir conta e dados</button></div>
+      </form>
+
+      <div class="dialog-actions"><button type="button" class="ghost" data-close>Fechar</button></div>
+    </div>
   </dialog>
 
   <noscript>Ative o JavaScript para montar sua grade.</noscript>

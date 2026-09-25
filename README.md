@@ -40,6 +40,7 @@ HTML, CSS e JavaScript puros, sem etapa de build. O login é opcional e usa [Sup
 **Conta (opcional)**
 - Cadastro com confirmação por e-mail, login, recuperação e redefinição de senha.
 - Sincronização da grade e da agenda entre dispositivos.
+- Aviso de privacidade (link no rodapé) e exclusão da conta com todos os dados pelo próprio usuário.
 
 ## Como usar
 
@@ -68,7 +69,7 @@ Depois do envio, a cópia local é removida, para que nenhum dado fique no compu
 Sem configuração, o botão **Entrar** não aparece e a aplicação funciona apenas no navegador.
 
 1. Crie um projeto em [supabase.com](https://supabase.com).
-2. No **SQL Editor**, execute [`supabase/schema.sql`](supabase/schema.sql). O script cria as tabelas `plans` e `agenda_items`, as políticas de Row Level Security e o limite de registros por usuário. Pode ser reexecutado com segurança.
+2. No **SQL Editor**, execute [`supabase/schema.sql`](supabase/schema.sql). O script cria as tabelas `plans` e `agenda_items`, as políticas de Row Level Security, o limite de registros por usuário e a função `delete_own_account`, usada na exclusão de conta. Pode ser reexecutado com segurança.
 3. Em **Authentication → URL Configuration**, defina `https://cauefabreu.github.io/BioSchedule/` como *Site URL* e adicione-a em *Redirect URLs*. Para testes locais, inclua também `http://127.0.0.1:4173/`.
 4. Em **Authentication → Providers → Email**, mantenha a confirmação de e-mail ativa e defina senha mínima de 8 caracteres.
 5. Em **Project Settings → API**, copie a *Project URL* e a chave pública (*anon* ou *publishable*) para [`config.js`](config.js):
@@ -134,6 +135,7 @@ node tools/version-assets.cjs
 - **Validação em camadas:** entradas são validadas no navegador e novamente no banco (título até 120 caracteres, anotações até 2.000, pontuação de 0 a 1.000, no máximo 2.000 compromissos por usuário). Dados lidos do navegador ou da conta são conferidos contra o catálogo.
 - **Saída segura:** todo texto é escapado antes de ser inserido no HTML.
 - **Autenticação:** fluxo PKCE e mensagens de erro genéricas, que não revelam se um e-mail está cadastrado.
+- **Privacidade (LGPD):** o aviso no rodapé descreve os dados coletados e a finalidade. Estando conectado, o usuário exclui a própria conta pela função `delete_own_account`, que só apaga quem a chama. Grade e agenda são removidas junto por `on delete cascade`. Ao alterar o que é coletado, atualize o texto e a data do aviso em `index.html`.
 - **Sem dependências de CDN:** a biblioteca do Supabase é servida pelo próprio site.
 - **Sem dados sensíveis no repositório:** nenhum dado pessoal ou chave secreta é versionado. `config.js` contém apenas a chave pública.
 

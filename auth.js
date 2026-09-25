@@ -96,6 +96,51 @@
       }
     });
 
+    // ------------------------------------------------------------ Privacidade e exclusão de conta
+
+    const privacy = $('privacy-dialog');
+    const deleteForm = $('delete-form');
+    const deleteMessage = $('delete-message');
+
+    function openPrivacy() {
+      if (dialog.open) dialog.close();
+      deleteForm.reset();
+      deleteForm.hidden = !store.status.user;
+      deleteMessage.textContent = '';
+      deleteMessage.classList.remove('error');
+      $('privacy-status').textContent = '';
+      privacy.showModal();
+    }
+
+    document.addEventListener('click', (event) => {
+      if (event.target.closest('[data-open-privacy]')) openPrivacy();
+    });
+    privacy.addEventListener('click', (event) => {
+      if (event.target.closest('[data-close]')) privacy.close();
+    });
+
+    deleteForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (busy) return;
+      const say = (text, isError) => {
+        deleteMessage.textContent = text;
+        deleteMessage.classList.toggle('error', isError);
+      };
+      if (deleteForm.elements.confirm.value.trim() !== 'EXCLUIR') return say('Digite EXCLUIR, em maiúsculas, para confirmar.', true);
+      busy = true;
+      $('delete-submit').disabled = true;
+      say('Excluindo…', false);
+      try {
+        const r = await store.auth.deleteAccount();
+        if (!r.ok) return say(r.message, true);
+        deleteForm.hidden = true;
+        $('privacy-status').textContent = 'Sua conta e todos os dados foram excluídos.';
+      } finally {
+        busy = false;
+        $('delete-submit').disabled = false;
+      }
+    });
+
     $('auth-button').addEventListener('click', async () => {
       if (!store.status.user) return open('signin');
       if (store.pending() && !root.confirm('Há alterações ainda não sincronizadas. Sair mesmo assim? Elas serão perdidas.')) return;

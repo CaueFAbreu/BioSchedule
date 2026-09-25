@@ -68,3 +68,24 @@ drop trigger if exists agenda_items_limit on public.agenda_items;
 create trigger agenda_items_limit
   before insert on public.agenda_items
   for each row execute function public.agenda_items_limit();
+
+-- Exclusão da própria conta (LGPD). Apaga apenas o usuário que faz a chamada;
+-- grade e agenda são removidas junto pelo "on delete cascade".
+create or replace function public.delete_own_account()
+returns void
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  uid uuid := auth.uid();
+begin
+  if uid is null then
+    raise exception 'Não autenticado';
+  end if;
+  delete from auth.users where id = uid;
+end;
+$$;
+
+revoke all on function public.delete_own_account() from public, anon;
+grant execute on function public.delete_own_account() to authenticated;

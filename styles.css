@@ -427,6 +427,22 @@ dialog form { display: flex; flex-direction: column; gap: 12px; }
 .auth-message.error { color: var(--rust); }
 .auth-switch { display: flex; gap: 16px; flex-wrap: wrap; margin: 4px 0 0; }
 
+.privacy { display: flex; flex-direction: column; gap: 4px; font-size: 14px; }
+.privacy p, .privacy ul { margin: 6px 0; }
+.privacy ul { padding-left: 20px; color: var(--muted); }
+.privacy a { color: var(--olive); }
+.privacy .auth-message:empty { display: none; }
+.danger-zone {
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid var(--rust);
+  border-radius: 8px;
+  background: var(--peach);
+}
+.danger-zone h3 { margin: 0; font-size: 15px; color: #ffd0b8; }
+.danger-zone p { color: #ffd0b8; }
+.danger-zone .field { color: #ffd0b8; }
+
 /* ================================================================ Rodapé */
 
 footer {
@@ -438,6 +454,7 @@ footer {
   color: var(--muted);
   font-size: 13px;
 }
+footer { align-items: center; gap: 12px; }
 footer span { font-family: Georgia, serif; font-style: italic; }
 
 /* ================================================================ Responsivo */

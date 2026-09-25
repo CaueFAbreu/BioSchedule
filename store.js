@@ -325,6 +325,16 @@
         if (client) await client.auth.signOut({ scope: 'local' }).catch(() => {});
         leaveAccount();
       },
+      /** Apaga permanentemente a conta e todos os dados dela no servidor. */
+      async deleteAccount() {
+        if (!status.user) return { ok: false, message: 'Entre na conta para excluí-la.' };
+        const result = await authCall(() => client.rpc('delete_own_account'));
+        if (!result.ok) return result;
+        queue.clear();
+        await client.auth.signOut({ scope: 'local' }).catch(() => {});
+        leaveAccount();
+        return { ok: true };
+      },
     };
 
     return {

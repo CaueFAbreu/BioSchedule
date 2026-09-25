@@ -58,6 +58,14 @@ function fakeSupabase({ fail = false } = {}) {
 
   const client = {
     from,
+    rpc(name) {
+      if (control.fail || name !== 'delete_own_account') return respond(null);
+      // Simula o "on delete cascade" do banco.
+      db.plans = db.plans.filter((r) => r.user_id !== user.id);
+      db.agenda_items = db.agenda_items.filter((r) => r.user_id !== user.id);
+      control.deleted = true;
+      return respond(null);
+    },
     auth: {
       onAuthStateChange: (fn) => { listener = fn; },
       getSession: async () => ({ data: { session: null } }),
@@ -202,4 +210,28 @@ test('se a conta não carrega, as mudanças continuam salvas no navegador', asyn
   assert.equal(store.status.mode, 'cloud');
   assert.deepEqual(supabase.db.plans[0].data.selected, { FAMAT31011: '2' });
   assert.equal(storage.data.has('plan'), false);
+});
+
+test('excluir conta apaga os dados no servidor e volta ao modo local', async () => {
+  const supabase = fakeSupabase();
+  const { store } = setup({ supabase });
+  await store.init();
+  assert.equal((await store.auth.deleteAccount()).ok, false);
+  await store.auth.signIn('aluno@ufu.br', 'correta123');
+  await tick();
+  store.setPlan({ selected: { FAMAT31011: '2' }, completed: [] });
+  store.saveItem(item());
+  await tick();
+  assert.equal(supabase.db.agenda_items.length, 1);
+
+  supabase.fail = true;
+  assert.equal((await store.auth.deleteAccount()).ok, false);
+  assert.equal(store.status.mode, 'cloud');
+
+  supabase.fail = false;
+  assert.equal((await store.auth.deleteAccount()).ok, true);
+  assert.equal(supabase.deleted, true);
+  assert.equal(supabase.db.plans.length + supabase.db.agenda_items.length, 0);
+  assert.equal(store.status.user, null);
+  assert.deepEqual(store.state, { plan: { selected: {}, completed: [] }, agenda: [] });
 });
