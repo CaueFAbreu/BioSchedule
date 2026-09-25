@@ -10,9 +10,9 @@ As escolhas são salvas no localStorage do navegador e da origem utilizada. Não
 
 ## Dados e limites
 
-- `data.js`: 65 entradas transcritas do PDF `horario_eng._biom._2026-02_atualizado_0.pdf`, incluindo Monitoria Obrigatória. Sem nomes de professores ou cópia do PDF no repositório.
+- `data.js`: 64 entradas transcritas do PDF `horario_eng._biom._2026-02_atualizado_0.pdf`. Monitoria Obrigatória foi removida a pedido do usuário. Sem nomes de professores ou cópia do PDF no repositório.
 - Fonte: horários de Engenharia Biomédica, segundo semestre de 2026, 12 páginas, fornecidos pelo usuário.
-- Cargas curriculares e requisitos dos 64 componentes: `fluxogramaeb2020-versao12.pdf`, página única, fornecido pelo usuário. Associação por nome, pois o fluxograma utiliza numeração própria (1–64), não códigos. Monitoria não consta nele; mantém carga e requisitos desconhecidos.
+- Cargas curriculares e requisitos dos 64 componentes: `fluxogramaeb2020-versao12.pdf`, página única, fornecido pelo usuário. Associação por nome, pois o fluxograma utiliza numeração própria (1–64), não códigos. Extensão 1 é online, sem horário fixo, conforme informado pelo usuário; preserva 90h curriculares.
 - `hours` representa horas curriculares totais. `prerequisites` exige conclusão; `corequisites` aceita conclusão ou seleção simultânea. Setas simples e duplas foram conferidas visualmente. Uma lista vazia indica ausência de exigência no fluxograma; `null` significa desconhecido.
 - TCC exige 2.700h e estágio 2.300h concluídas. O contador considera somente o catálogo: optativas, atividades complementares e outros créditos não estão cadastrados, portanto avisos não substituem validação acadêmica.
 - O contador semanal soma minutos de aula, sem os intervalos, ponderando aulas quinzenais por 1/2. Conta aulas sobrepostas individualmente; não mede tempo livre/ocupado e não substitui carga curricular.
