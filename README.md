@@ -40,3 +40,5 @@ O diretório `qa/` guarda apenas material local de conferência e é ignorado pe
 Publicação estática pela raiz da branch `codex/initial-site`, com `.nojekyll`. Não há chaves de API ou dados pessoais armazenados no repositório.
 
 [Documentação oficial de publicação por branch](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site).
+
+Antes de publicar alterações em CSS ou JavaScript, execute `node tools/version-assets.cjs`. O comando atualiza as URLs dos arquivos com hashes de conteúdo para evitar versões antigas no cache, sem apagar as escolhas salvas do usuário.
